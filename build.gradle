@@ -36,6 +36,9 @@ switch (System.getenv().getOrDefault('IDEA_VERSION', ideaVersion)) {
     case ~/2020\.2.*/:
         lombokPlugin = 'Lombook Plugin:0.34-2020.2'
         break
+    case ~/2020\.3.*/:
+        lombokPlugin = 'Lombook Plugin:0.32-EAP'
+        break
 }
 
 intellij {
