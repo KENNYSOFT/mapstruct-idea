@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import static org.mapstruct.intellij.util.MapstructUtil.canDescendIntoType;
 import static org.mapstruct.intellij.util.MapstructUtil.getSourceParameters;
 import static org.mapstruct.intellij.util.MapstructUtil.publicFields;
+import static org.mapstruct.intellij.util.MapstructUtil.recordComponents;
 
 /**
  * Utils for working with source properties (extracting sources for MapStruct).
@@ -121,6 +122,7 @@ public class SourceUtils {
 
         publicReadAccessors.putAll( publicGetters( psiClass ) );
         publicReadAccessors.putAll( publicFields( psiClass ) );
+        publicReadAccessors.putAll( recordComponents( psiClass ) );
 
         return publicReadAccessors;
     }

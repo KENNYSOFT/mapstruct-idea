@@ -35,13 +35,16 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifier;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiRecordComponent;
 import com.intellij.psi.PsiSubstitutor;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
 import com.intellij.psi.impl.PsiClassImplUtil;
+import com.intellij.psi.impl.light.LightRecordField;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.JavaPsiRecordUtil;
 import com.intellij.psi.util.PsiFormatUtil;
 import com.intellij.psi.util.PsiFormatUtilBase;
 import com.intellij.psi.util.PsiUtil;
@@ -416,6 +419,28 @@ public final class MapstructUtil {
         }
 
         return publicFields;
+    }
+
+    public static Map<String, Pair<PsiField, PsiSubstitutor>> recordComponents(PsiClass psiClass) {
+        List<Pair<PsiField, PsiSubstitutor>> fieldPairs = PsiClassImplUtil.getAllWithSubstitutorsByMap(
+                psiClass,
+                PsiClassImplUtil.MemberType.FIELD
+        );
+
+        if ( fieldPairs.isEmpty() ) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, Pair<PsiField, PsiSubstitutor>> recordComponents = new HashMap<>();
+
+        for ( Pair<PsiField, PsiSubstitutor> fieldPair : fieldPairs ) {
+            PsiField field = fieldPair.getFirst();
+            if ( field instanceof LightRecordField ) {
+                recordComponents.put( field.getName(), fieldPair );
+            }
+        }
+
+        return recordComponents;
     }
 
     /**

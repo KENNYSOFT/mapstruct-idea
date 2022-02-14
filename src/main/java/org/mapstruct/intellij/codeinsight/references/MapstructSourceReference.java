@@ -15,6 +15,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
+import com.intellij.psi.impl.light.LightRecordField;
 import com.intellij.psi.util.PsiUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,6 +68,9 @@ class MapstructSourceReference extends MapstructBaseReference {
         if ( field != null && isPublicNonStatic( field ) ) {
             return field;
         }
+        if ( field instanceof LightRecordField ) {
+            return field;
+        }
         return null;
     }
 
@@ -77,14 +81,11 @@ class MapstructSourceReference extends MapstructBaseReference {
             return null;
         }
 
-        if ( sourceParameters.length == 1 ) {
-            PsiType parameterType = getParameterType( sourceParameters[0] );
-            PsiElement psiElement = parameterType == null ? null : resolveInternal( value, parameterType );
-            if ( psiElement != null ) {
-                return psiElement;
-            }
+        PsiType parameterType = getParameterType( sourceParameters[0] );
+        PsiElement psiElement = parameterType == null ? null : resolveInternal( value, parameterType );
+        if ( psiElement != null ) {
+            return psiElement;
         }
-        //TODO first do property mapping then parameter
 
         return Stream.of( sourceParameters )
             .filter( psiParameter -> Objects.equals( psiParameter.getName(), value ) )

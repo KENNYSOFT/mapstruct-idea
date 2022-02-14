@@ -19,6 +19,7 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiVariable;
+import com.intellij.psi.util.JavaPsiRecordUtil;
 import com.intellij.psi.util.PsiUtil;
 import de.plushnikov.intellij.plugin.psi.LombokLightMethodBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -85,6 +86,9 @@ class MapstructTargetReference extends MapstructBaseReference {
                             if ( field != null ) {
                                 return field;
                             }
+                        }
+                        if ( psiClass.isRecord() ) {
+                            return JavaPsiRecordUtil.getComponentForCanonicalConstructorParameter( parameter );
                         }
                         return parameter;
                     }
