@@ -28,6 +28,16 @@ repositories {
     mavenCentral()
 }
 
+def lombokPlugin = System.getenv().getOrDefault('LOMBOK_PLUGIN_VERSION', 'lombok')
+switch (System.getenv().getOrDefault('IDEA_VERSION', ideaVersion)) {
+    case ~/2020\.1.*/:
+        lombokPlugin = 'Lombook Plugin:0.34-2020.1'
+        break
+    case ~/2020\.2.*/:
+        lombokPlugin = 'Lombook Plugin:0.34-2020.2'
+        break
+}
+
 intellij {
     version = System.getenv().getOrDefault('IDEA_VERSION', ideaVersion)
     type = ideaType
@@ -37,7 +47,7 @@ intellij {
     pluginName = 'MapStruct-Intellij-Plugin'
     // The properties plugin is needed because Kotlin uses it
     // and for some reason plugins does not transitively pull itx
-    plugins = ['java', 'Kotlin', 'properties', 'Lombook Plugin:0.34-2020.1']
+    plugins = ['java', 'Kotlin', 'properties', lombokPlugin]
 }
 
 compileKotlin {
