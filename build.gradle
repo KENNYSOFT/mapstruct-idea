@@ -37,7 +37,7 @@ intellij {
     pluginName = 'MapStruct-Intellij-Plugin'
     // The properties plugin is needed because Kotlin uses it
     // and for some reason plugins does not transitively pull itx
-    plugins = ['java', 'Kotlin', 'properties']
+    plugins = ['java', 'Kotlin', 'properties', 'Lombook Plugin:0.34-2020.1']
 }
 
 compileKotlin {
